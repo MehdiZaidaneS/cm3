@@ -1,4 +1,4 @@
-const Product = require("../models/productModel");
+const Job = require("../models/jobModel");
 const mongoose = require("mongoose");
 
 //GET / products;
@@ -30,7 +30,7 @@ const getJobById = async (req, res) => {
   }
 
   try {
-    const job = await Product.findById(jobId);
+    const job = await Job.findById(jobId);
     if (job) {
       res.status(200).json(job);
     } else {
@@ -74,7 +74,7 @@ const deleteJob = async (req, res) => {
   }
 
   try {
-    const deletedJob = await Product.findOneAndDelete({ _id: jobId });
+    const deletedJob = await Job.findOneAndDelete({ _id: jobId });
     if (deletedJob) {
       res.status(204).send(); // 204 No Content
     } else {
