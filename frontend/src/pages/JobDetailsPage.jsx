@@ -8,11 +8,14 @@ const JobDetailsPage = ({ isAuthenticated }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Environment-aware backend URL
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
   const deleteJob = async (id) => {
     const token = localStorage.getItem("token");
 
     try {
-      const res = await fetch(`/api/jobs/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/api/jobs/${id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -24,17 +27,17 @@ const JobDetailsPage = ({ isAuthenticated }) => {
       }
       console.log("Job deleted successfully");
       navigate("/");
-    } catch (error) {
-      console.error("Error deleting job:", error);
+    } catch (err) {
+      console.error("Error deleting job:", err);
     }
   };
 
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await fetch(`/api/jobs/${id}`);
+        const res = await fetch(`${API_BASE_URL}/api/jobs/${id}`);
         if (!res.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Failed to fetch job details");
         }
         const data = await res.json();
         setJob(data);
@@ -46,7 +49,7 @@ const JobDetailsPage = ({ isAuthenticated }) => {
     };
 
     fetchJob();
-  }, [id]);
+  }, [id, API_BASE_URL]);
 
   const onDeleteClick = (jobId) => {
     const confirmDelete = window.confirm(
@@ -62,7 +65,7 @@ const JobDetailsPage = ({ isAuthenticated }) => {
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
-        <p>{error}</p>
+        <p style={{ color: "red" }}>{error}</p>
       ) : job ? (
         <>
           <h2>{job.title}</h2>

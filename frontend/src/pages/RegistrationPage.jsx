@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RegistrationPage = ({ setIsAuthenticated }) => {
-  const API_URL = "/api/users";
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
@@ -28,31 +27,30 @@ const RegistrationPage = ({ setIsAuthenticated }) => {
     });
   };
 
-  const addUser = async (body) => {
-    try {
-      const response = await fetch(`${API_URL}/signup`, {
-        method: "POST",
-        body: JSON.stringify(body),
-        headers: { "Content-Type": "application/json" },
-      });
+ const API_URL = import.meta.env.VITE_API_URL + "/api/users";
 
-      if (!response.ok) {
-        const message = await response.text();
-        throw new Error(message || "Error creating user");
-      }
+const addUser = async (body) => {
+  try {
+    const response = await fetch(`${API_URL}/signup`, {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" },
+    });
 
-      const data = await response.json();
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
-
-      return data;
-    } catch (error) {
-      setError(error.message);
-      console.error("Failed to create user:", error);
-      return null;
+    if (!response.ok) {
+      const message = await response.text();
+      throw new Error(message || "Error creating user");
     }
-  };
 
+    const data = await response.json();
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data.user));
+    return data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};
   const submitForm = async (e) => {
     e.preventDefault();
     const result = await addUser(form);

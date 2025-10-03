@@ -6,10 +6,13 @@ const JobListings = () => {
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
 
+  // Use environment variable for backend URL
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "";
+
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const res = await fetch("/api/jobs");
+        const res = await fetch(`${API_BASE_URL}/api/jobs`);
         if (!res.ok) {
           throw new Error("Could not fetch jobs");
         }
@@ -24,11 +27,11 @@ const JobListings = () => {
     };
 
     fetchJobs();
-  }, []);
+  }, [API_BASE_URL]);
 
   return (
     <div className="job-list">
-      {error && <div>{error}</div>}
+      {error && <div style={{ color: "red" }}>{error}</div>}
       {isPending && <div>Loading...</div>}
       {jobs && jobs.map((job) => (
         <JobListing key={job._id} job={job} />

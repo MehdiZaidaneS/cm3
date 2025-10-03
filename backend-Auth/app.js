@@ -12,10 +12,7 @@ const cors = require("cors");
 
 // Middlewares
 app.use(
-  cors({
-    origin: "https://frontend-cm3-static-site.onrender.com",
-    credentials: true,
-  })
+  cors()
 );
 app.use(express.json());
 
