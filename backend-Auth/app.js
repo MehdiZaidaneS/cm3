@@ -1,18 +1,26 @@
-require('dotenv').config()
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const jobRouter = require("./routes/jobRouter");
 const userRouter = require("./routes/userRouter");
-const { unknownEndpoint,errorHandler } = require("./middleware/customMiddleware");
+const {
+  unknownEndpoint,
+  errorHandler,
+} = require("./middleware/customMiddleware");
 const connectDB = require("./config/db");
 const cors = require("cors");
 
 // Middlewares
-app.use(cors())
+app.use(
+  cors({
+    origin: "https://frontend-cm3-static-site.onrender.com",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 connectDB();
- 
+
 // Use the productRouter for all "/products" routes
 app.use("/api/jobs", jobRouter);
 // Use the userRouter for all "/jobs" routes
@@ -25,4 +33,4 @@ module.exports = app;
 
 // app.listen(process.env.PORT, () => {
 //   console.log(`Server running on port ${process.env.PORT}`)
-// })  
+// })
