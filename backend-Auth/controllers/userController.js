@@ -3,31 +3,17 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 // Generate JWT
-const generateToken = (_id) => {
-  return jwt.sign({ _id }, process.env.SECRET, {
-    expiresIn: "3d",
-  });
+const generateToken = (id) => {
+  return jwt.sign({ _id: id }, process.env.SECRET, { expiresIn: "1h" });
 };
 
 // @desc    Register new user
 // @route   POST /api/users/signup
 // @access  Public
 const signupUser = async (req, res) => {
-  const {
-    name,
-    email,
-    password,
-    role,
-    bio
-  } = req.body;
+  const { name, email, password, role, bio } = req.body;
   try {
-    if (
-      !name ||
-      !email ||
-      !password ||
-      !role ||
-      !bio
-    ) {
+    if (!name || !email || !password || !role || !bio) {
       res.status(400);
       throw new Error("Please add all fields");
     }
@@ -49,7 +35,7 @@ const signupUser = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      bio
+      bio,
     });
 
     if (user) {
@@ -81,9 +67,8 @@ const loginUser = async (req, res) => {
       res.status(400);
       throw new Error("Invalid credentials");
     }
-     
-    user.lastLogin = Date.now
 
+    user.lastLogin = Date.now;
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
