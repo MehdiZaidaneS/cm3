@@ -1,9 +1,9 @@
-import ProductListings from "../components/ProductListings";
+import JobListings from "../components/JobListings";
 
 const Home = () => {
   return (
     <div className="home">
-      <ProductListings  />
+      <JobListings />
     </div>
   );
 };

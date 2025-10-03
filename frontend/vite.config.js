@@ -9,7 +9,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       "/api": {
-        target: "https://week7-fe-pp-wednesday.onrender.com",
+        target: "http://localhost:4000",
         changeOrigin: true,
       },
     },
