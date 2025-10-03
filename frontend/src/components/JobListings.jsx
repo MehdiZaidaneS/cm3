@@ -1,39 +1,40 @@
 import { useEffect, useState } from "react";
-import ProductListing from "./ProductListing";
+import JobListing from "./JobListing";
 
-const ProductListings = () => {
-  const [products, setProducts] = useState(null);
+const JobListings = () => {
+  const [jobs, setJobs] = useState(null);
   const [isPending, setIsPending] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchJobs = async () => {
       try {
-        const res = await fetch("/api/products");
+        const res = await fetch("/api/jobs");
         if (!res.ok) {
-          throw new Error("Could not fetch the data for that resource");
+          throw new Error("Could not fetch jobs");
         }
         const data = await res.json();
         setIsPending(false);
-        setProducts(data);
+        setJobs(data);
         setError(null);
       } catch (err) {
         setIsPending(false);
         setError(err.message);
       }
     };
-    fetchProducts();
+
+    fetchJobs();
   }, []);
 
   return (
     <div className="job-list">
       {error && <div>{error}</div>}
       {isPending && <div>Loading...</div>}
-      {products && products.map((product) => (
-        <ProductListing key={product.id} product={product} />
+      {jobs && jobs.map((job) => (
+        <JobListing key={job._id} job={job} />
       ))}
     </div>
   );
 };
 
-export default ProductListings;
+export default JobListings;

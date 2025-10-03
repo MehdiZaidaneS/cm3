@@ -15,13 +15,13 @@ const Navbar = ({isAuthenticated, setIsAuthenticated}) => {
 
   return (
     <nav className="navbar">
-      <h1>Product Search</h1>
+      <h1>Job Search</h1>
       <div className="links">
         {
           isAuthenticated ?
             <>
               <Link to="/">Home</Link>
-              <Link to="/add-job">Add Product</Link>
+              <Link to="/add-job">Add Job</Link>
               <button onClick={handleOnClick}>Log out</button>
             </>
             :
