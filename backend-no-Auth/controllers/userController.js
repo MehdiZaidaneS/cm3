@@ -3,10 +3,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 // Generate JWT
-const generateToken = (_id) => {
-  return jwt.sign({ _id }, process.env.SECRET, {
-    expiresIn: "3d",
-  });
+const generateToken = (id) => {
+  return jwt.sign({ _id: id }, process.env.SECRET, { expiresIn: "1h" });
 };
 
 // @desc    Register new user
@@ -15,25 +13,35 @@ const generateToken = (_id) => {
 const signupUser = async (req, res) => {
   const {
     name,
-    email,
+    username,
     password,
-    role,
-    bio
+    phone_number,
+    gender,
+    date_of_birth,
+    membership_status,
+    bio,
+    address,
+    profile_picture,
   } = req.body;
+
   try {
+    // Validate required fields
     if (
       !name ||
-      !email ||
+      !username ||
       !password ||
-      !role ||
-      !bio
+      !phone_number ||
+      !gender ||
+      !date_of_birth ||
+      !membership_status ||
+      !address
     ) {
       res.status(400);
-      throw new Error("Please add all fields");
+      throw new Error("Please add all required fields");
     }
-    // Check if user exists
-    const userExists = await User.findOne({ email });
 
+    // Check if user exists
+    const userExists = await User.findOne({ username });
     if (userExists) {
       res.status(400);
       throw new Error("User already exists");
@@ -46,14 +54,18 @@ const signupUser = async (req, res) => {
     // Create user
     const user = await User.create({
       name,
-      email,
+      username,
       password: hashedPassword,
-      role,
-      bio
+      phone_number,
+      gender,
+      date_of_birth,
+      membership_status,
+      bio,
+      address,
+      profile_picture,
     });
 
     if (user) {
-      // console.log(user._id);
       const token = generateToken(user._id);
       res.status(201).json({ user, token });
     } else {
@@ -69,21 +81,24 @@ const signupUser = async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const loginUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
+
   try {
-    // Check for user email
-    const user = await User.findOne({ email });
+    // Check for user
+    const user = await User.findOne({ username });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = generateToken(user._id);
-      res.status(200).json({ username, token });
+
+      // Update last login
+      user.lastLogin = Date.now();
+      await user.save();
+
+      res.status(200).json({ user, token });
     } else {
       res.status(400);
       throw new Error("Invalid credentials");
     }
-     
-    user.lastLogin = Date.now
-
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

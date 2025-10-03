@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
-const app = require("../../backend-no-Auth/app");
+const app = require("../../backend-Auth/app");
 const api = supertest(app);
-const Job = require("../../backend-no-Auth/models/jobModel");
-const User = require("../../backend-no-Auth/models/userModel");
+const Job = require("../../backend-Auth/models/jobModel");
+const User = require("../../backend-Auth/models/userModel");
 
 describe("Job Controller - API V2 (With Authentication)", () => {
   let authToken;
@@ -21,8 +21,11 @@ describe("Job Controller - API V2 (With Authentication)", () => {
       date_of_birth: "1990-01-01",
       membership_status: "active",
       address: "123 Test Street",
+      bio: "Test user bio",
     });
-    console.log("token..", userResponse.body.token);
+
+    console.log("Signup response:", userResponse.body);
+    console.log("Token:", userResponse.body.token);
     authToken = userResponse.body.token;
   });
 
