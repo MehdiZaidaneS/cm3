@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 const JobListing = ({ job }) => {
   return (
     <div className="job-preview">
-      <Link to={`/jobs/${job._id}`}>
+      <Link to={`/jobs/${job.id}`}>
         <h2>{job.title}</h2>
       </Link>
       <p><strong>Company:</strong> {job.company?.name}</p>

@@ -51,7 +51,7 @@ const App = () => {
                 !isAuthenticated ? <Navigate to="/login" /> : <Home />
               }
             />
-            <Route path="/jobs/add" element={<AddJobPage />} />
+            <Route path="/add-job" element={<AddJobPage />} />
             <Route
               path="/jobs/:id"
               element={<JobDetailsPage isAuthenticated={isAuthenticated} />}

@@ -85,8 +85,8 @@ const JobDetailsPage = ({ isAuthenticated }) => {
 
           {isAuthenticated && (
             <div style={{ marginTop: "1rem" }}>
-              <button onClick={() => onDeleteClick(job._id)}>Delete</button>
-              <button onClick={() => navigate(`/jobs/edit/${job._id}`)}>Edit</button>
+              <button onClick={() => onDeleteClick(job.id)}>Delete</button>
+              <button onClick={() => navigate(`/jobs/edit/${job.id}`)}>Edit</button>
             </div>
           )}
         </>
